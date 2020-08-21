@@ -12,19 +12,19 @@ This is a vanilla JS implementation (thanks to [Svelte](http://svelte.dev)) of a
 
 ### What are its features?
 
-* Small, discrete, and non-intrusive
-* GDPR Compliant
-* Responsive
-* Offers four categories
-* Runs any function on opting-in
-* Runs opted-in functions on each visit
-* Changing the choices requires the user to opt-in again.
-* Vanilla JS
-* Svelte Ready
-* No dependencies
-* Choices expire yearly
-* Optional CSS (with BEM) to bootstrap your cookie message right away
-* Modifiable labels and messages
+- Small, discrete, and non-intrusive
+- GDPR Compliant
+- Responsive
+- Offers four categories
+- Runs any function on opting-in
+- Runs opted-in functions on each visit
+- Changing the choices requires the user to opt-in again.
+- Vanilla JS
+- Svelte Ready
+- No dependencies
+- Choices expire yearly
+- Optional CSS (with BEM) to bootstrap your cookie message right away
+- Modifiable labels and messages
 
 ### How do I install it?
 
@@ -39,10 +39,10 @@ npm install --save-dev @beyonk/gdpr-cookie-consent-banner
 then import the banner into your code:
 
 ```js
-import attachBanner from '@beyonk/gdpr-cookie-consent-banner'
-import '@beyonk/gdpr-cookie-consent-banner/dist/style.css' // import optional styles
+import attachBanner from '@beyonk/gdpr-cookie-consent-banner';
+import '@beyonk/gdpr-cookie-consent-banner/dist/style.css'; // import optional styles
 
-attachBanner(document.body)
+attachBanner(document.body);
 ```
 
 #### Using raw javascript
@@ -50,7 +50,10 @@ attachBanner(document.body)
 ##### From a CDN
 
 ```html
-<link rel="stylesheet" href="//unpkg.com/@beyonk/gdpr-cookie-consent-banner/dist/style.css">
+<link
+  rel="stylesheet"
+  href="//unpkg.com/@beyonk/gdpr-cookie-consent-banner/dist/style.css"
+/>
 <script src="//unpkg.com/@beyonk/gdpr-cookie-consent-banner/dist/browser/bundle.min.js"></script>
 ```
 
@@ -59,10 +62,10 @@ attachBanner(document.body)
 Download the contents of `dist/browser/bundle.js` and `dist/style.css` to your codebase, and include it in your html:
 
 ```html
-<link rel="stylesheet" href="path/to/style.css">
+<link rel="stylesheet" href="path/to/style.css" />
 <script src="path/to/bundle.js"></script>
 <script>
-  GdprConsent.attachBanner(document.body)
+  GdprConsent.attachBanner(document.body);
 </script>
 ```
 
@@ -77,11 +80,15 @@ I've documented our usage of it below:
 Just use it as a regular svelte component:
 
 ```html
-<GdprBanner cookieName="foo" description="bar" on:analytics="this.someFunction()" />
+<GdprBanner
+  cookieName="foo"
+  description="bar"
+  on:analytics="this.someFunction()"
+/>
 
 <script>
-  import '@beyonk/gdpr-cookie-consent-banner/dist/style.css' // optional, you can also define your own styles
-  import GdprBanner from '@beyonk/gdpr-cookie-consent-banner'
+  import '@beyonk/gdpr-cookie-consent-banner/dist/style.css'; // optional, you can also define your own styles
+  import GdprBanner from '@beyonk/gdpr-cookie-consent-banner';
 </script>
 ```
 
@@ -94,6 +101,7 @@ See the v4.x.x tag of this repository.
 You can use the banner in NuxtJS application as follows:
 
 Create a component which uses the library, and mounts it during the render stage:
+
 ```js
 <template>
   <div ref="gdprBanner"></div>
@@ -112,6 +120,7 @@ Create a component which uses the library, and mounts it during the render stage
 ```
 
 Optionally, add this to your CSS array in your `nuxt.config.js` file:
+
 ```js
 /**
  * Global CSS
@@ -137,7 +146,7 @@ const options = {
    **/
   cookieConfig: {
     domain: 'example.com',
-    path: '/'
+    path: '/',
   },
 
   /**
@@ -145,7 +154,8 @@ const options = {
    * The 'description' field can include html such as links
    **/
   heading: 'GDPR Notice',
-  description: 'We use cookies to offer a better browsing experience, analyze site traffic, personalize content, and serve targeted advertisements. Please review our <a href="/privacy-policy">privacy policy page</a>. By clicking accept, you consent to our privacy policy & use of cookies.',
+  description:
+    'We use cookies to offer a better browsing experience, analyze site traffic, personalize content, and serve targeted advertisements. Please review our <a href="/privacy-policy">privacy policy page</a>. By clicking accept, you consent to our privacy policy & use of cookies.',
 
   /**
    * All the button labels
@@ -165,14 +175,14 @@ const options = {
       label: 'Required cookies',
       description:
         "These can't be turned off as they are used to control all the other cookies",
-      value: true
+      value: true,
     },
-    analytics: false
+    analytics: false,
   },
 
   /**
    * Show an icon to edit cookies later, when banner is closed.
-  **/
+   **/
   showEditIcon: true,
 
   /**
@@ -182,19 +192,28 @@ const options = {
    * If you are using svelte, you can use events instead - see the Svelte section below.
    **/
   categories: {
-    analytics: function() {
-      console.log('No analytics cookies specified')
+    analytics: function () {
+      console.log('No analytics cookies specified');
     },
-    tracking: function() {
-      console.log('No tracking cookies specified')
+    tracking: function () {
+      console.log('No tracking cookies specified');
     },
-    marketing: function() {
-      console.log('No marketing cookies specified')
+    marketing: function () {
+      console.log('No marketing cookies specified');
     },
-    necessary: function() {
-      console.log('No necessary cookies specified')
-    }
-  }
-}
-GdprConsent.attachBanner(document.body, options)
+    necessary: function () {
+      console.log('No necessary cookies specified');
+    },
+  },
+  /**
+   * Added by zeerobug
+   * This is run when the submit button is pressed
+   * It contains all categories and their state
+   * usefull to toggle cookies on and off
+   **/
+  choicesHandle: function (choices) {
+    console.log('Currrent state of categories', choices);
+  },
+};
+GdprConsent.attachBanner(document.body, options);
 ```

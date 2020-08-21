@@ -1,5 +1,5 @@
 {
-  "name": "@beyonk/gdpr-cookie-consent-banner",
+  "name": "privagy-cookie-consent-banner",
   "version": "6.4.1",
   "description": "GDPR Cookie Consent Banner in vanilla js",
   "main": "dist/esm/bundle.js",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "repository": "beyonk-adventures/gdpr-cookie-consent-banner"
+    "repository": "zeerobug/privagy-cookie-consent-banner"
   },
   "scripts": {
     "demo": "http-server",
