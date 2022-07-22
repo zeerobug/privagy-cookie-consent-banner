@@ -23,7 +23,7 @@
     marketing: function() {},
     necessary: function() {}
   };
-  export let choicesHandle = function() {};
+  export let choicesHandler = function() {};
 
   export let cookieConfig = {};
 
@@ -84,12 +84,12 @@
   function setCookie(choices) {
     const expires = new Date();
     expires.setDate(expires.getDate() + 365);
-
     const options = Object.assign({}, cookieConfig, { expires });
-    cookies.set(cookieName, { choices }, options);
+    cookies.set(cookieName, choices, options);
   }
 
-  function removeCookie() {
+  function removeCookie(name = "") {
+    if (name === "") name = cookieName;
     const { path } = cookieConfig;
     cookies.remove(cookieName, Object.assign({}, path ? { path } : {}));
   }
@@ -109,13 +109,33 @@
         dispatch(`${t}`);
       }
     });
-    choicesHandle(cookieChoices);
+    choicesHandler(cookieChoices);
+    hanldeCookies();
     shown = false;
   }
 
   function choose() {
     setCookie(cookieChoices);
     execute(cookieChoices);
+  }
+
+  function eraseCookie(name, path, domain) {
+    console.log("REEMOVING", name, path, domain);
+    cookies.remove(name, { path, domain });
+  }
+  function hanldeCookies() {
+    Object.keys(cookieChoices).forEach(type => {
+      if (cookieChoices[type] == false) {
+        choicesMerged[type]["cookies"] &&
+          choicesMerged[type]["cookies"].forEach(cookie => {
+            eraseCookie(
+              cookie.name,
+              cookie.path ? cookie.path : "",
+              cookie.domain ? cookie.domain : ""
+            );
+          });
+      }
+    });
   }
 </script>
 

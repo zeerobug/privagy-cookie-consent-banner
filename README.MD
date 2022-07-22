@@ -211,7 +211,7 @@ const options = {
    * It contains all categories and their state
    * usefull to toggle cookies on and off
    **/
-  choicesHandle: function (choices) {
+  choicesHandler: function (choices) {
     console.log('Currrent state of categories', choices);
   },
 };

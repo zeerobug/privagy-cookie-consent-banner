@@ -556,7 +556,7 @@
     	return child_ctx;
     }
 
-    // (124:0) {#if showEditIcon}
+    // (143:0) {#if showEditIcon}
     function create_if_block_3(ctx) {
     	var button, button_transition, current, dispose;
 
@@ -611,7 +611,7 @@
     	};
     }
 
-    // (146:0) {#if shown}
+    // (165:0) {#if shown}
     function create_if_block_2(ctx) {
     	var div4, div3, div1, div0, p0, t0, t1, p1, t2, div2, button0, t3, t4, button1, t5, div4_transition, current, dispose;
 
@@ -716,7 +716,7 @@
     	};
     }
 
-    // (172:0) {#if settingsShown}
+    // (191:0) {#if settingsShown}
     function create_if_block(ctx) {
     	var div1, div0, t0, button, t1, div1_transition, current, dispose;
 
@@ -821,7 +821,7 @@
     	};
     }
 
-    // (176:8) {#if choicesMerged.hasOwnProperty(choice.id) && choicesMerged[choice.id]}
+    // (195:8) {#if choicesMerged.hasOwnProperty(choice.id) && choicesMerged[choice.id]}
     function create_if_block_1(ctx) {
     	var div, input, input_id_value, input_disabled_value, t0, label, t1_value = ctx.choice.label, t1, label_for_value, t2, span, t3_value = ctx.choice.description, t3, dispose;
 
@@ -902,7 +902,7 @@
     	};
     }
 
-    // (175:6) {#each choicesArr as choice}
+    // (194:6) {#each choicesArr as choice}
     function create_each_block(ctx) {
     	var if_block_anchor;
 
@@ -1083,7 +1083,7 @@
         marketing: function() {},
         necessary: function() {}
       } } = $$props;
-      let { choicesHandle = function() {} } = $$props;
+      let { choicesHandler = function() {} } = $$props;
 
       let { cookieConfig = {}, choices = {} } = $$props;
       const choicesDefaults = {
@@ -1131,12 +1131,13 @@
       function setCookie(choices) {
         const expires = new Date();
         expires.setDate(expires.getDate() + 365);
-
         const options = Object.assign({}, cookieConfig, { expires });
-        cookies.set(cookieName, { choices }, options);
+            console.log("cookieName", cookieName, options);
+        cookies.set(cookieName, choices, options);
       }
 
-      function removeCookie() {
+      function removeCookie(name = "") {
+        if (name === "") name = cookieName;
         const { path } = cookieConfig;
         cookies.remove(cookieName, Object.assign({}, path ? { path } : {}));
       }
@@ -1156,15 +1157,33 @@
             dispatch(`${t}`);
           }
         });
-        console.log("DISPATCHING", typeof choicesHandle);
-        choicesHandle(cookieChoices);
+        choicesHandler(cookieChoices);
+        hanldeCookies();
         $$invalidate('shown', shown = false);
       }
 
       function choose() {
-        console.log("INSIDE", cookieChoices);
         setCookie(cookieChoices);
         execute(cookieChoices);
+      }
+
+      function eraseCookie(name, path, domain) {
+        console.log("REEMOVING", name, path, domain);
+        cookies.remove(name, { path, domain });
+      }
+      function hanldeCookies() {
+        Object.keys(cookieChoices).forEach(type => {
+          if (cookieChoices[type] == false) {
+            choicesMerged[type]["cookies"] &&
+              choicesMerged[type]["cookies"].forEach(cookie => {
+                eraseCookie(
+                  cookie.name,
+                  cookie.path ? cookie.path : "",
+                  cookie.domain ? cookie.domain : ""
+                );
+              });
+          }
+        });
       }
 
     	function click_handler() {
@@ -1197,7 +1216,7 @@
     		if ('heading' in $$props) $$invalidate('heading', heading = $$props.heading);
     		if ('description' in $$props) $$invalidate('description', description = $$props.description);
     		if ('categories' in $$props) $$invalidate('categories', categories = $$props.categories);
-    		if ('choicesHandle' in $$props) $$invalidate('choicesHandle', choicesHandle = $$props.choicesHandle);
+    		if ('choicesHandler' in $$props) $$invalidate('choicesHandler', choicesHandler = $$props.choicesHandler);
     		if ('cookieConfig' in $$props) $$invalidate('cookieConfig', cookieConfig = $$props.cookieConfig);
     		if ('choices' in $$props) $$invalidate('choices', choices = $$props.choices);
     		if ('acceptLabel' in $$props) $$invalidate('acceptLabel', acceptLabel = $$props.acceptLabel);
@@ -1225,7 +1244,7 @@
     		heading,
     		description,
     		categories,
-    		choicesHandle,
+    		choicesHandler,
     		cookieConfig,
     		choices,
     		choicesMerged,
@@ -1244,7 +1263,7 @@
     class Banner extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance, create_fragment, safe_not_equal, ["cookieName", "showEditIcon", "heading", "description", "categories", "choicesHandle", "cookieConfig", "choices", "acceptLabel", "settingsLabel", "closeLabel"]);
+    		init(this, options, instance, create_fragment, safe_not_equal, ["cookieName", "showEditIcon", "heading", "description", "categories", "choicesHandler", "cookieConfig", "choices", "acceptLabel", "settingsLabel", "closeLabel"]);
     	}
     }
 
